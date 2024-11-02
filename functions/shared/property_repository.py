@@ -15,12 +15,13 @@ class PropertyRepository:
             cls._instance.db = firestore.Client(project=project_id)
         return cls._instance
     
-    def create_property(self, property_data: PropertyCreate, user_id: str) -> Property:
+    def create_property(self, property_data: PropertyCreate, user_id: str, uesr_email: str) -> Property:
         doc_ref = self.db.collection('properties').document()
         property_dict = property_data.dict()
         property_dict.update({
             'id': doc_ref.id,
             'owner_user_id': user_id,
+            'owner_email': uesr_email,
             'created_at': datetime.utcnow(),
             'updated_at': datetime.utcnow()
         })
@@ -64,6 +65,29 @@ class PropertyRepository:
         doc_ref.delete()
         return True
 
+    def create_properties(self, properties_data: List[PropertyCreate], user_id: str, user_email: str) -> List[Property]:
+        batch = self.db.batch()
+        properties = []
+        
+        for property_data in properties_data:
+            doc_ref = self.db.collection('properties').document()
+            property_dict = property_data.dict()
+            property_dict.update({
+                'id': doc_ref.id,
+                'owner_user_id': user_id,
+                'owner_email': user_email,
+                'created_at': datetime.utcnow(),
+                'updated_at': datetime.utcnow()
+            })
+            batch.set(doc_ref, property_dict)
+            properties.append(Property(**property_dict))
+        
+        batch.commit()
+        return properties
+
+    def get_properties_by_user(self, user_id: str) -> List[Property]:
+        query = self.db.collection('properties').where('owner_user_id', '==', user_id)
+        return [Property(**doc.to_dict()) for doc in query.stream()]
+    
     def search_properties(self, query) -> List[Property]:
-        properties_ref = self.db.collection('properties')
         return [Property(**doc.to_dict()) for doc in query.stream()]

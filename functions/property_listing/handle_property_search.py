@@ -1,32 +1,34 @@
-import firebase_admin
 import firebase_functions as functions
 from firebase_admin import credentials
 from shared.auth_middleware import authenticate
 from shared.models import SearchCriteria
-from shared.search_strategies import CompositeSearchStrategy
-from firebase_functions import https_fn
+from shared.search_strategies import SearchStrategyEngine
+from firebase_functions import https_fn, options
 
 # Initialize Firebase Admin
 # cred = credentials.ApplicationDefault()
 # firebase_admin.initialize_app(cred)
 
-@https_fn.on_request()  # Use Firebase's decorator
+@https_fn.on_request(cors=options.CorsOptions(
+        cors_origins="*",
+        cors_methods=["get", "post", "delete", "put"],
+    )
+) 
 def handle_property_search(request):
     """Handle property search operations."""
     try:
-        # Authenticate request
-        auth_result = authenticate(request)
-        if not auth_result.success:
-            return auth_result.response
-        
+        method = request.method
+        path = request.path
+        print('---------request----------', request)
+
+        print('---------path----------', path)
         if request.method != 'POST':
             return {'error': 'Method not allowed'}, 405
             
         search_data = request.get_json()
         criteria = SearchCriteria(**search_data)
         
-        # Use composite search strategy to handle multiple search criteria
-        search_strategy = CompositeSearchStrategy()
+        search_strategy = SearchStrategyEngine()
         results = search_strategy.search(criteria)
         
         return {

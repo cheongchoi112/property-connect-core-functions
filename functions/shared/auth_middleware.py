@@ -6,6 +6,7 @@ import firebase_admin
 class AuthResult:
     success: bool
     user_id: str = None
+    user_email: str = None
     response: Tuple[Dict[str, Any], int] = None
 
 def authenticate(request) -> AuthResult:
@@ -27,7 +28,7 @@ def authenticate(request) -> AuthResult:
             response=({'error': 'Invalid token audience'}, 401)
             )
             
-        return AuthResult(success=True, user_id=decoded_token['uid'])
+        return AuthResult(success=True, user_id=decoded_token['uid'], user_email=decoded_token['email'])
         
     except Exception as e:
         return AuthResult(
