@@ -17,14 +17,8 @@ from firebase_functions import https_fn, options
 def handle_property_search(request):
     """Handle property search operations."""
     try:
-        method = request.method
-        path = request.path
-        print('---------request----------', request)
-
-        print('---------path----------', path)
         if request.method != 'POST':
             return {'error': 'Method not allowed'}, 405
-            
         search_data = request.get_json()
         criteria = SearchCriteria(**search_data)
         

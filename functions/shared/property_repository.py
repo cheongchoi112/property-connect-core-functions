@@ -15,13 +15,13 @@ class PropertyRepository:
             cls._instance.db = firestore.Client(project=project_id)
         return cls._instance
     
-    def create_property(self, property_data: PropertyCreate, user_id: str, uesr_email: str) -> Property:
+    def create_property(self, property_data: PropertyCreate, user_id: str, user_email: str) -> Property:
         doc_ref = self.db.collection('properties').document()
         property_dict = property_data.dict()
         property_dict.update({
             'id': doc_ref.id,
             'owner_user_id': user_id,
-            'owner_email': uesr_email,
+            'owner_email': user_email,
             'created_at': datetime.utcnow(),
             'updated_at': datetime.utcnow()
         })
