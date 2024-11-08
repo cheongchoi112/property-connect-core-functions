@@ -1,6 +1,8 @@
 import sys
 from pathlib import Path
 import firebase_admin
+from firebase_admin import credentials
+
 
 sys.path.insert(0, Path(__file__).parent.as_posix())
 
