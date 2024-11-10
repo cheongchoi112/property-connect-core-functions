@@ -1,9 +1,11 @@
 from abc import ABC, abstractmethod
 from typing import List, Set
-from .models import Property, SearchCriteria
-from .property_repository import PropertyRepository
-import logging
 from google.cloud.firestore_v1 import FieldFilter  # Import FieldFilter
+
+from domain.models import Property, SearchCriteria
+from infrastructure.property_repository import PropertyRepository
+
+import logging
 
 class SearchStrategy(ABC):
     @abstractmethod

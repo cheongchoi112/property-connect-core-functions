@@ -1,8 +1,9 @@
 from google.cloud import firestore
 from datetime import datetime
 from typing import List, Optional
-from .models import Property, PropertyCreate, PropertyUpdate
 import firebase_admin
+
+from domain.models import Property, PropertyCreate, PropertyUpdate
 
 class PropertyRepository:
     _instance = None

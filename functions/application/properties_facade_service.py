@@ -1,8 +1,8 @@
 # properties_facade_service.py
-from .search_strategies import SearchStrategyEngine
-from .property_repository import PropertyRepository
-from .models import PropertyCreate, PropertyUpdate, Property, SearchCriteria
-from typing import List, Optional
+from application.search_strategies import SearchStrategyEngine
+from infrastructure.property_repository import PropertyRepository
+from domain.models import PropertyCreate, PropertyUpdate, SearchCriteria
+
 
 class PropertiesFacadeService:
     def create_properties(self, repo, request, user_email, user_id):

@@ -1,9 +1,10 @@
 import logging
 
 from firebase_functions import https_fn, options
-from shared.properties_facade_service import PropertiesFacadeService
-from shared.auth_middleware import authenticate
-from shared.property_repository import PropertyRepository
+
+from application.properties_facade_service import PropertiesFacadeService
+from infrastructure.auth_middleware import authenticate
+from infrastructure.property_repository import PropertyRepository
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
