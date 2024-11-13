@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from typing import Dict, Any, Tuple
 from firebase_admin import auth
 import firebase_admin
+
 @dataclass
 class AuthResult:
     success: bool
@@ -10,7 +11,9 @@ class AuthResult:
     response: Tuple[Dict[str, Any], int] = None
 
 def authenticate(request) -> AuthResult:
-    """Authenticate the request using Firebase ID token."""
+    """
+    Infrastructure Layer: Handles authentication using Firebase ID tokens.
+    """
     if 'Authorization' not in request.headers:
         return AuthResult(
             success=False,

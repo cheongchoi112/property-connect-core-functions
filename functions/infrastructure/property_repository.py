@@ -1,10 +1,17 @@
 from google.cloud import firestore
 from datetime import datetime
 from typing import List, Optional
-from .models import Property, PropertyCreate, PropertyUpdate
 import firebase_admin
 
+from domain.models import Property, PropertyCreate, PropertyUpdate
+
 class PropertyRepository:
+    """
+    Infrastructure Layer: Manages property data access and manipulation.
+
+    Relationships:
+    - Uses models from the domain layer to represent property data.
+    """
     _instance = None
     
     def __new__(cls):
@@ -15,13 +22,13 @@ class PropertyRepository:
             cls._instance.db = firestore.Client(project=project_id)
         return cls._instance
     
-    def create_property(self, property_data: PropertyCreate, user_id: str, uesr_email: str) -> Property:
+    def create_property(self, property_data: PropertyCreate, user_id: str, user_email: str) -> Property:
         doc_ref = self.db.collection('properties').document()
         property_dict = property_data.dict()
         property_dict.update({
             'id': doc_ref.id,
             'owner_user_id': user_id,
-            'owner_email': uesr_email,
+            'owner_email': user_email,
             'created_at': datetime.utcnow(),
             'updated_at': datetime.utcnow()
         })

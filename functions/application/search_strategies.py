@@ -1,16 +1,28 @@
 from abc import ABC, abstractmethod
 from typing import List, Set
-from .models import Property, SearchCriteria
-from .property_repository import PropertyRepository
-import logging
 from google.cloud.firestore_v1 import FieldFilter  # Import FieldFilter
 
+from domain.models import Property, SearchCriteria
+from infrastructure.property_repository import PropertyRepository
+
+import logging
+
 class SearchStrategy(ABC):
+    """
+    Application Layer: Abstract base class for search strategies.
+
+    This class uses the Strategy design pattern to define a family of search strategies,
+    encapsulate each one, and make them interchangeable. This allows the algorithm to vary independently
+    from the clients that use it.
+    """
     @abstractmethod
     def search(self, criteria: SearchCriteria) -> List[Property]:
         pass
 
 class CitySearchStrategy(SearchStrategy):
+    """
+    Application Layer: Search strategy for filtering properties by city.
+    """
     def search(self, criteria: SearchCriteria) -> List[Property]:
         repo = PropertyRepository()
         query = repo.db.collection('properties')
@@ -22,6 +34,9 @@ class CitySearchStrategy(SearchStrategy):
         return repo.search_properties(query)
 
 class PriceRangeSearchStrategy(SearchStrategy):
+    """
+    Application Layer: Search strategy for filtering properties by price range. This srearch strategy is not implemented in the frontend.
+    """
     def search(self, criteria: SearchCriteria) -> List[Property]:
         repo = PropertyRepository()
         query = repo.db.collection('properties')
@@ -33,6 +48,9 @@ class PriceRangeSearchStrategy(SearchStrategy):
         return repo.search_properties(query)
 
 class PropertyTypeSearchStrategy(SearchStrategy):
+    """
+    Application Layer: Search strategy for filtering properties by property type.
+    """
     def search(self, criteria: SearchCriteria) -> List[Property]:
         repo = PropertyRepository()
         query = repo.db.collection('properties')
@@ -43,6 +61,9 @@ class PropertyTypeSearchStrategy(SearchStrategy):
         return repo.search_properties(query)
 
 class ListingTypeSearchStrategy(SearchStrategy):
+    """
+    Application Layer: Search strategy for filtering properties by listing type.
+    """
     def search(self, criteria: SearchCriteria) -> List[Property]:
         repo = PropertyRepository()
         query = repo.db.collection('properties')
@@ -53,6 +74,9 @@ class ListingTypeSearchStrategy(SearchStrategy):
         return repo.search_properties(query)
 
 class SearchStrategyEngine(SearchStrategy):
+    """
+    Application Layer: Engine for applying multiple search strategies.
+    """
     def search(self, criteria: SearchCriteria) -> List[Property]:
         results: Set[Property] = set()
         applied_strategies = False
