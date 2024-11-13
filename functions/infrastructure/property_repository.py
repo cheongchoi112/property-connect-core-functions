@@ -6,6 +6,12 @@ import firebase_admin
 from domain.models import Property, PropertyCreate, PropertyUpdate
 
 class PropertyRepository:
+    """
+    Infrastructure Layer: Manages property data access and manipulation.
+
+    Relationships:
+    - Uses models from the domain layer to represent property data.
+    """
     _instance = None
     
     def __new__(cls):

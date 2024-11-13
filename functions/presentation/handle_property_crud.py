@@ -16,7 +16,14 @@ logger.setLevel(logging.INFO)
     )
 )
 def handle_property_crud(request: https_fn.Request) -> https_fn.Response:
-    """Handle CRUD operations for properties."""
+    """
+    Presentation Layer: Handles CRUD operations for properties.
+
+    Relationships:
+    - Uses properties_facade_service from the application layer for property CRUD operations.
+    - Indirectly depends on property_repository through properties_facade_service in the infrastructure layer for data access.
+    - Potentially uses auth_middleware through properties_facade_service in the infrastructure layer for authentication.
+    """
     method = request.method
     path = request.path
 

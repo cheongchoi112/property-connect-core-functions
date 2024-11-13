@@ -43,8 +43,13 @@ PropertyConnect Core Functions is a collection of Firebase Cloud Functions desig
    ```
 
 3. **Run Firebase functions locally:**
+
    ```sh
    firebase emulators:start
    ```
 
-This will start the Firebase emulator suite, allowing you to test your functions locally.
+4. **Deploy Firebase functions:**
+   ```sh
+   firebase deploy --only hosting
+   ```
+   This will start the Firebase emulator suite, allowing you to test your functions locally.

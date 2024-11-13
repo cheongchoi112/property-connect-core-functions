@@ -5,7 +5,18 @@ from domain.models import PropertyCreate, PropertyUpdate, SearchCriteria
 
 
 class PropertiesFacadeService:
-    def create_properties(self, repo, request, user_email, user_id):
+    """
+    Application Layer: Provides a facade for property-related operations.
+
+    This class uses the Facade design pattern to simplify interactions with the complex subsystem of property operations.
+    It provides a unified interface to a set of interfaces in the application layer, making it easier to use.
+
+    Relationships:
+    - Uses models from the domain layer to represent property data.
+    - Uses property_repository from the infrastructure layer for data access.
+    - Uses search_strategies from the application layer for applying different search algorithms.
+    """
+    def create_properties(self, repo : PropertyRepository, request, user_email, user_id):
         try:
             print('---------request.get_json()----------', request.get_json())
             data = request.get_json()
@@ -45,7 +56,7 @@ class PropertiesFacadeService:
         updated_property = repo.update_property(property_id, property_data)
         return {'data': updated_property.dict()}, 200
     
-    def delete_property(self, repo, path, user_id):
+    def delete_property(self, repo : PropertyRepository, path, user_id):
         property_id = path.split('/')[-1]
         property_obj = repo.get_property(property_id)
         if not property_obj:
